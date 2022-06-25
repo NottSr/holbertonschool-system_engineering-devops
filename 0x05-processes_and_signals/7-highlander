@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Bash script that displays messages
+trap 'echo "I am invincible!!!"' TERM
+while :
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
