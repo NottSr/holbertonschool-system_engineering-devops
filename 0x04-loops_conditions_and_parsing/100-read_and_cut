@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Write a Bash script that displays the content
+# of the file /etc/passwd
+
+FILE="/etc/passwd"
+while IFS=: read -r line
+do
+    echo "$line" | cut -f1,3,6 -d ":"
+done < $FILE
