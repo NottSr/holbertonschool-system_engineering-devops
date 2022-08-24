@@ -1,20 +1,17 @@
 #!/usr/bin/env bash
 # Bash script configure your Nginx server to have a custom 404 page that contains the string Ceci n'est pas une page.
 
+link="https://www.youtube.com/watch?v=QH2-TGUlwu4"
+config_def="server_name _;\n\trewrite ^/redirect_me/$ $link permanent;"
+err_loc="location = /404.html {\n\t\troot /var/www/html/;\n\t\tinternal;\n"
+err_dir="error_page 404 /404.html;\n\t$location_error"
+config_err="}\n\n\t$err_dir\t}"
+
 sudo apt-get update
 sudo apt-get -y install nginx
 ufw allow 'Nginx HTTP'
 echo 'Hello World!' > /var/www/html/index.html
 echo "Ceci n'est pas une page" > /var/www/html/404.html
-echo "error_page 404 403 500 503 /error-page.html;
-    location = /error-page.html {
-        root /var/www/html;
-        internal;
-    }" > /etc/nginx/snippets/custom-error-page.conf 
-sudo service nginx start
-sudo chmod 777 /etc/nginx/sites-available/
-sudo chmod 777 /etc/nginx/sites-available/default
-sed -i "/listen 80 default_server;/ a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default
-
-sed -i "/listen 80 default_server;/ a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default
+sed -i "s|server_name\ _;|$config_def|" /etc/nginx/sites-available/default
+sed -i "0,/}/ s|}|$config_err|" /etc/nginx/sites-available/default
 sudo service nginx restart
