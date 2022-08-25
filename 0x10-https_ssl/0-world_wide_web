@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 # Bash script that prints subdomain values
 
-g_com="grep -A1 'ANSWER SECTION:'"
+g_com ()
+{
+    grep -A1 'ANSWER SECTION:'
+}
 
 if [ -z "$2" ]
 then
-    dig www.$1 | eval $g_com | awk '/nottsite/ {print "The subdomain www is a "$4" record and points to "$5}'
-    dig lb-01.$1 | eval $g_com | awk '/nottsite/ {print "The subdomain lb-01 is a "$4" record and points to "$5}'
-    dig web-01.$1 | eval $g_com | awk '/nottsite/ {print "The subdomain web-01 is a "$4" record and points to "$5}'
-    dig web-02.$1 | eval $g_com | awk '/nottsite/ {print "The subdomain web-02 is a "$4" record and points to "$5}'
+    dig www."$1" | g_com | awk '/nottsite/ {print "The subdomain www is a "$4" record and points to "$5}'
+    dig lb-01."$1" | g_com | awk '/nottsite/ {print "The subdomain lb-01 is a "$4" record and points to "$5}'
+    dig web-01."$1" | g_com | awk '/nottsite/ {print "The subdomain web-01 is a "$4" record and points to "$5}'
+    dig web-02."$1" | g_com | awk '/nottsite/ {print "The subdomain web-02 is a "$4" record and points to "$5}'
 else
-    dig $2.$1 | eval $g_com | awk '/nottsite/ {print "The subdomain '"$2"' is a "$4" record and points to "$5}'
+    dig "$2"."$1" | g_com | awk '/nottsite/ {print "The subdomain '"$2"' is a "$4" record and points to "$5}'
 fi
