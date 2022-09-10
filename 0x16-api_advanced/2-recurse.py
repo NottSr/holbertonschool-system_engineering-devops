@@ -25,6 +25,9 @@ def recurse(subreddit, hot_list=[], af=''):
         allow_redirects=False
     )
 
+    if res.status_code in [302, 404]:
+        return None
+
     if res.status_code == 200:
         for element in res.json()['data']['children']:
             hot_list.append(element['data']['title'])
